@@ -46,27 +46,31 @@ const Game = (() => {
 })();
 
 const displayController = (() => {
-  let board = document.createElement("div");
-  board.setAttribute("class", "board");
-  let gameBoard = document.querySelector(".gameBoard");
-  let rowIndex = 1;
-  for (let row of GameBoard.getBoard()) {
-    let rowDiv = document.createElement("div");
-    rowDiv.setAttribute("class", "row");
-    rowDiv.setAttribute("id", `row${rowIndex}`);
-    let columnIndex = 1;
-    for (let column of row) {
-      let columnDiv = document.createElement("div");
-      columnDiv.setAttribute("class", `column${columnIndex}`);
-      columnDiv.setAttribute("id", `row${rowIndex}-column${columnIndex}`);
-      let markerText = document.createElement("p");
-      markerText.textContent = column;
-      columnDiv.appendChild(markerText);
-      rowDiv.appendChild(columnDiv);
-      columnIndex++;
+  function drawBoard() {
+    let board = document.createElement("div");
+    board.setAttribute("class", "board");
+    let gameBoard = document.querySelector(".gameBoard");
+    let rowIndex = 1;
+    for (let row of GameBoard.getBoard()) {
+      let rowDiv = document.createElement("div");
+      rowDiv.setAttribute("class", "row");
+      rowDiv.setAttribute("id", `row${rowIndex}`);
+      let columnIndex = 1;
+      for (let column of row) {
+        let columnDiv = document.createElement("div");
+        columnDiv.setAttribute("class", `column${columnIndex}`);
+        columnDiv.setAttribute("id", `row${rowIndex}-column${columnIndex}`);
+        let markerText = document.createElement("p");
+        markerText.textContent = column;
+        columnDiv.appendChild(markerText);
+        rowDiv.appendChild(columnDiv);
+        columnIndex++;
+      }
+      board.appendChild(rowDiv);
+      rowIndex++;
     }
-    board.appendChild(rowDiv);
-    rowIndex++;
+    gameBoard.appendChild(board);
   }
-  gameBoard.appendChild(board);
+
+  return { drawBoard: drawBoard };
 })();
