@@ -72,5 +72,10 @@ const displayController = (() => {
     gameBoard.appendChild(board);
   }
 
-  return { drawBoard: drawBoard };
+  function deleteCurrentBoard() {
+    let board = document.querySelector(".board");
+    board.parentNode.removeChild(board);
+  }
+
+  return { drawBoard: drawBoard, deleteCurrentBoard: deleteCurrentBoard };
 })();
