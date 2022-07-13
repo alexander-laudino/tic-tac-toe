@@ -53,3 +53,11 @@
   border-left: 1px solid black;
   border-right: 1px solid black;
 }
+
+.column1,
+.column2,
+.column3 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
