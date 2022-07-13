@@ -44,3 +44,26 @@ const Game = (() => {
 
   return { getPlayers: getPlayers };
 })();
+
+const displayController = (() => {
+  let board = document.createElement("div");
+  board.setAttribute("class", "board");
+  let gameBoard = document.querySelector(".gameBoard");
+  let rowIndex = 1;
+  for (let row of GameBoard.getBoard()) {
+    let rowDiv = document.createElement("div");
+    rowDiv.setAttribute("class", "row");
+    rowDiv.setAttribute("id", `row${rowIndex}`);
+    let columnIndex = 1;
+    for (let column of row) {
+      let columnDiv = document.createElement("div");
+      columnDiv.setAttribute("class", `column${columnIndex}`);
+      columnDiv.setAttribute("id", `row${rowIndex}-column${columnIndex}`);
+      rowDiv.appendChild(columnDiv);
+      columnIndex++;
+    }
+    board.appendChild(rowDiv);
+    rowIndex++;
+  }
+  gameBoard.appendChild(board);
+})();
