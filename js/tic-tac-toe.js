@@ -1,9 +1,9 @@
 const GameBoard = (() => {
-  const board = {};
-  const row = { column1: "", column2: "", column3: "" };
-  board.row1 = Object.assign({}, row);
-  board.row2 = Object.assign({}, row);
-  board.row3 = Object.assign({}, row);
+  const board = [];
+  const row = ["", "", ""];
+  board[0] = Object.assign([], row);
+  board[1] = Object.assign([], row);
+  board[2] = Object.assign([], row);
 
   function getBoard() {
     return board;
