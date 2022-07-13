@@ -1,20 +1,20 @@
 const GameBoard = (() => {
-  const board = [];
-  const row = ["", "", ""];
-  board[0] = Object.assign([], row);
-  board[1] = Object.assign([], row);
-  board[2] = Object.assign([], row);
+  const _board = [];
+  const _row = ["X", "X", "X"];
+  _board[0] = Object.assign([], _row);
+  _board[1] = Object.assign([], _row);
+  _board[2] = Object.assign([], _row);
 
   function getBoard() {
-    return board;
+    return _board;
   }
 
-  function selectSquare(row, column, marker) {
-    board[row][column] = marker;
+  function selectSquare(marker, row, column) {
+    _board[row][column] = marker;
   }
 
   function undoPreviousSelection(row, column) {
-    board[row][column] = "";
+    _board[row][column] = "";
   }
 
   return {
@@ -25,11 +25,22 @@ const GameBoard = (() => {
 })();
 
 const Player = (marker) => {
-  const playerMarker = marker;
+  const _playerMarker = marker;
 
   const getMarker = () => {
-    return playerMarker;
+    return _playerMarker;
   };
 
   return { getMarker };
 };
+
+const Game = (() => {
+  const _playerOne = Player("X");
+  const _playerTwo = Player("O");
+
+  function getPlayers() {
+    return [_playerOne, _playerTwo];
+  }
+
+  return { getPlayers: getPlayers };
+})();
