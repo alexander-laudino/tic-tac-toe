@@ -59,6 +59,9 @@ const displayController = (() => {
       let columnDiv = document.createElement("div");
       columnDiv.setAttribute("class", `column${columnIndex}`);
       columnDiv.setAttribute("id", `row${rowIndex}-column${columnIndex}`);
+      let markerText = document.createElement("p");
+      markerText.textContent = column;
+      columnDiv.appendChild(markerText);
       rowDiv.appendChild(columnDiv);
       columnIndex++;
     }
