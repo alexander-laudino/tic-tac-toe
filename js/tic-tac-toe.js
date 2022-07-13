@@ -23,3 +23,13 @@ const GameBoard = (() => {
     undoPreviousSelection: undoPreviousSelection,
   };
 })();
+
+const Player = (marker) => {
+  const playerMarker = marker;
+
+  const getMarker = () => {
+    return playerMarker;
+  };
+
+  return { getMarker };
+};
