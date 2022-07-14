@@ -29,16 +29,6 @@ const GameBoard = (() => {
   };
 })();
 
-const Player = (marker) => {
-  const _playerMarker = marker;
-
-  const getMarker = () => {
-    return _playerMarker;
-  };
-
-  return { getMarker };
-};
-
 const displayController = (() => {
   function drawBoard() {
     let gameBoard = document.querySelector(".gameBoard");
@@ -100,11 +90,21 @@ const displayController = (() => {
 })();
 
 const Game = (() => {
+  const Player = (marker) => {
+    const _playerMarker = marker;
+
+    const getMarker = () => {
+      return _playerMarker;
+    };
+
+    return { getMarker };
+  };
+
   const _playerOne = Player("X");
   const _playerTwo = Player("O");
 
   function getPlayers() {
-    return [_playerOne, _playerTwo];
+    return [_playerOne.getMarker(), _playerTwo.getMarker()];
   }
 
   function playRound() {}
