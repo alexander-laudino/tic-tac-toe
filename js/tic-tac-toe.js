@@ -24,22 +24,25 @@ const Game = (() => {
     }
 
     function _getThreeInARows() {
-      let _threeInARows = [];
+      let threeInARows = [];
       for (let i = 0; i < _board.length; i++) {
-        _threeInARows.push(_board[i]);
+        threeInARows.push(_board[i]);
       }
       let col0 = [_board[0][0], _board[1][0], _board[2][0]];
       let col1 = [_board[0][1], _board[1][1], _board[2][1]];
       let col2 = [_board[0][2], _board[1][2], _board[2][2]];
       let diag0 = [_board[0][0], _board[1][1], _board[2][2]];
       let diag1 = [_board[0][2], _board[1][1], _board[2][0]];
-      _threeInARows.push(col0, col1, col2, diag0, diag1);
+      threeInARows.push(col0, col1, col2, diag0, diag1);
 
-      return _threeInARows;
+      return threeInARows;
     }
 
-    function checkForWinner() {
-      return _getThreeInARows();
+    function checkForWinner(marker) {
+      let winningArray = _getThreeInARows().filter((row) =>
+        row.every((square) => square === marker)
+      );
+      return winningArray.length;
     }
 
     return {
@@ -70,8 +73,8 @@ const Game = (() => {
   let totalTurns = 0;
 
   function getCurrentPlayer() {
-    let _currentPlayer = _getPlayers()[totalTurns++ % 2];
-    return _currentPlayer;
+    let currentPlayer = _getPlayers()[totalTurns++ % 2];
+    return currentPlayer;
   }
 
   return {
@@ -133,6 +136,10 @@ const displayController = (() => {
     Game.selectSquare(marker, row, column);
     displayController.deleteCurrentBoard();
     displayController.drawBoard();
+    let gameWon = Game.checkForWinner(marker);
+    if (gameWon === 1) {
+      console.log(`${marker} wins!`);
+    }
   }
 
   function _createMarkerPara(column) {
