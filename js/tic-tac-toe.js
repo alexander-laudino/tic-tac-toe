@@ -138,7 +138,7 @@ const displayController = (() => {
     displayController.drawBoard();
     let gameWon = Game.checkForWinner(marker);
     if (gameWon === 1) {
-      console.log(`${marker} wins!`);
+      _openWinnerPopup(marker);
     }
   }
 
@@ -146,6 +146,20 @@ const displayController = (() => {
     let markerPara = document.createElement("p");
     markerPara.textContent = column;
     return markerPara;
+  }
+
+  function _openWinnerPopup(marker) {
+    let popup = document.getElementById("winnerPopup");
+    popup.style.display = "block";
+    let winnerPara = document.createElement("p");
+    winnerPara.setAttribute("class", "winnerPara");
+    winnerPara.textContent = `${marker} wins!`;
+    popup.appendChild(winnerPara);
+    popup.addEventListener("click", _closeWinnerPopup), false;
+  }
+
+  function _closeWinnerPopup() {
+    document.getElementById("winnerPopup").style.display = "none";
   }
 
   function deleteCurrentBoard() {
