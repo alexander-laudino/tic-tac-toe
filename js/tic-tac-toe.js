@@ -74,8 +74,12 @@ const displayController = (() => {
   }
 
   function _addMarker(e) {
-    console.log(e.target.getAttribute("data-row"));
-    console.log(e.target.getAttribute("data-column"));
+    let marker = Game.getCurrentPlayer();
+    let row = e.target.getAttribute("data-row");
+    let column = e.target.getAttribute("data-column");
+    GameBoard.selectSquare(marker, row, column);
+    displayController.deleteCurrentBoard();
+    displayController.drawBoard();
   }
 
   function _createMarkerPara(column) {
@@ -106,9 +110,18 @@ const Game = (() => {
   const _playerOne = Player("X");
   const _playerTwo = Player("O");
 
-  function getPlayers() {
+  function _getPlayers() {
     return [_playerOne.getMarker(), _playerTwo.getMarker()];
   }
 
-  return { getPlayers: getPlayers };
+  let totalTurns = 0;
+
+  function getCurrentPlayer() {
+    let _currentPlayer = _getPlayers()[totalTurns++ % 2];
+    return _currentPlayer;
+  }
+
+  return { getCurrentPlayer: getCurrentPlayer };
 })();
+
+displayController.drawBoard();
