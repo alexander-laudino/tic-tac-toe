@@ -77,13 +77,16 @@ const displayController = (() => {
     columnDiv.setAttribute("class", `column${columnIndex}`);
     columnDiv.setAttribute("data-row", `${rowIndex}`);
     columnDiv.setAttribute("data-column", `${columnIndex}`);
+    columnDiv.addEventListener("click", (e) => {
+      console.log(e.target);
+    });
     return columnDiv;
   }
 
   function _createMarkerPara(column) {
-    let markerText = document.createElement("p");
-    markerText.textContent = column;
-    return markerText;
+    let markerPara = document.createElement("p");
+    markerPara.textContent = column;
+    return markerPara;
   }
 
   function deleteCurrentBoard() {
