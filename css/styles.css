@@ -39,26 +39,26 @@
   grid-template-rows: 1fr 1fr 1fr;
 }
 
+.row0,
 .row1,
-.row2,
-.row3 {
+.row2 {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
 }
 
-.row2 {
+.row1 {
   border-top: 1px solid black;
   border-bottom: 1px solid black;
 }
 
-.column2 {
+.column1 {
   border-left: 1px solid black;
   border-right: 1px solid black;
 }
 
+.column0,
 .column1,
-.column2,
-.column3 {
+.column2 {
   display: flex;
   justify-content: center;
   align-items: center;
