@@ -33,10 +33,10 @@ const displayController = (() => {
   function drawBoard() {
     let gameBoard = document.querySelector(".gameBoard");
     let board = _createBoardDiv();
-    let rowIndex = 1;
+    let rowIndex = 0;
     for (let row of GameBoard.getBoard()) {
       let rowDiv = _createRowDiv(rowIndex);
-      let columnIndex = 1;
+      let columnIndex = 0;
       for (let column of row) {
         let columnDiv = _createColumnDiv(columnIndex, rowIndex, column);
         let markerText = _createMarkerPara(column);
@@ -68,11 +68,14 @@ const displayController = (() => {
     columnDiv.setAttribute("data-row", `${rowIndex}`);
     columnDiv.setAttribute("data-column", `${columnIndex}`);
     if (column === "") {
-      columnDiv.addEventListener("click", (e) => {
-        console.log(e.target);
-      });
+      columnDiv.addEventListener("click", _addMarker), false;
     }
     return columnDiv;
+  }
+
+  function _addMarker(e) {
+    console.log(e.target.getAttribute("data-row"));
+    console.log(e.target.getAttribute("data-column"));
   }
 
   function _createMarkerPara(column) {
@@ -106,8 +109,6 @@ const Game = (() => {
   function getPlayers() {
     return [_playerOne.getMarker(), _playerTwo.getMarker()];
   }
-
-  function playRound() {}
 
   return { getPlayers: getPlayers };
 })();
