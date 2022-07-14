@@ -77,11 +77,17 @@ const Game = (() => {
     return currentPlayer;
   }
 
+  function fullBoard() {
+    let isFull = totalTurns === 9 ? true : false;
+    return isFull;
+  }
+
   return {
     getCurrentPlayer: getCurrentPlayer,
     getBoard: GameBoard.getBoard,
     selectSquare: GameBoard.selectSquare,
     checkForWinner: GameBoard.checkForWinner,
+    fullBoard: fullBoard,
   };
 })();
 
@@ -137,8 +143,13 @@ const displayController = (() => {
     displayController.deleteCurrentBoard();
     displayController.drawBoard();
     let gameWon = Game.checkForWinner(marker);
+    let isFull = Game.fullBoard();
     if (gameWon === 1) {
       _openWinnerPopup(marker);
+    }
+
+    if (gameWon === 0 && isFull) {
+      _openWinnerPopup("Tie");
     }
   }
 
@@ -149,13 +160,27 @@ const displayController = (() => {
   }
 
   function _openWinnerPopup(marker) {
-    let popup = document.getElementById("winnerPopup");
-    popup.style.display = "block";
-    let winnerPara = document.createElement("p");
-    winnerPara.setAttribute("class", "winnerPara");
-    winnerPara.textContent = `${marker} wins!`;
+    let popup = _displayWinnerPopup();
+    let winnerPara = _createWinnerPara(marker);
     popup.appendChild(winnerPara);
     popup.addEventListener("click", _closeWinnerPopup), false;
+  }
+
+  function _displayWinnerPopup() {
+    let popup = document.getElementById("winnerPopup");
+    popup.style.display = "block";
+    return popup;
+  }
+
+  function _createWinnerPara(marker) {
+    let winnerPara = document.createElement("p");
+    winnerPara.setAttribute("class", "winnerPara");
+    if (marker === "Tie") {
+      winnerPara.textContent = "Tie game!";
+    } else {
+      winnerPara.textContent = `${marker} wins!`;
+    }
+    return winnerPara;
   }
 
   function _closeWinnerPopup() {
