@@ -39,12 +39,14 @@
   grid-template-rows: 1fr 1fr 1fr;
 }
 
-.row {
+.row1,
+.row2,
+.row3 {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
 }
 
-#row2 {
+.row2 {
   border-top: 1px solid black;
   border-bottom: 1px solid black;
 }
