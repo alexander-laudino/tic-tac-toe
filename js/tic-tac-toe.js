@@ -1,31 +1,63 @@
-const GameBoard = (() => {
-  const _board = _createBoardArray();
+const Game = (() => {
+  const GameBoard = (() => {
+    const _board = _createBoardArray();
 
-  function _createBoardArray() {
-    const _board = [];
-    const _row = ["", "", ""];
-    _board[0] = Object.assign([], _row);
-    _board[1] = Object.assign([], _row);
-    _board[2] = Object.assign([], _row);
-    return _board;
+    function _createBoardArray() {
+      const _board = [];
+      const _row = ["", "", ""];
+      _board[0] = Object.assign([], _row);
+      _board[1] = Object.assign([], _row);
+      _board[2] = Object.assign([], _row);
+      return _board;
+    }
+
+    function getBoard() {
+      return _board;
+    }
+
+    function selectSquare(marker, row, column) {
+      _board[row][column] = marker;
+    }
+
+    function undoPreviousSelection(row, column) {
+      _board[row][column] = "";
+    }
+
+    return {
+      getBoard: getBoard,
+      selectSquare: selectSquare,
+      undoPreviousSelection: undoPreviousSelection,
+    };
+  })();
+
+  const Player = (marker) => {
+    const _playerMarker = marker;
+
+    const getMarker = () => {
+      return _playerMarker;
+    };
+
+    return { getMarker };
+  };
+
+  const _playerOne = Player("X");
+  const _playerTwo = Player("O");
+
+  function _getPlayers() {
+    return [_playerOne.getMarker(), _playerTwo.getMarker()];
   }
 
-  function getBoard() {
-    return _board;
-  }
+  let totalTurns = 0;
 
-  function selectSquare(marker, row, column) {
-    _board[row][column] = marker;
-  }
-
-  function undoPreviousSelection(row, column) {
-    _board[row][column] = "";
+  function getCurrentPlayer() {
+    let _currentPlayer = _getPlayers()[totalTurns++ % 2];
+    return _currentPlayer;
   }
 
   return {
-    getBoard: getBoard,
-    selectSquare: selectSquare,
-    undoPreviousSelection: undoPreviousSelection,
+    getCurrentPlayer: getCurrentPlayer,
+    getBoard: GameBoard.getBoard,
+    selectSquare: GameBoard.selectSquare,
   };
 })();
 
@@ -34,7 +66,7 @@ const displayController = (() => {
     let gameBoard = document.querySelector(".gameBoard");
     let board = _createBoardDiv();
     let rowIndex = 0;
-    for (let row of GameBoard.getBoard()) {
+    for (let row of Game.getBoard()) {
       let rowDiv = _createRowDiv(rowIndex);
       let columnIndex = 0;
       for (let column of row) {
@@ -77,7 +109,7 @@ const displayController = (() => {
     let marker = Game.getCurrentPlayer();
     let row = e.target.getAttribute("data-row");
     let column = e.target.getAttribute("data-column");
-    GameBoard.selectSquare(marker, row, column);
+    Game.selectSquare(marker, row, column);
     displayController.deleteCurrentBoard();
     displayController.drawBoard();
   }
@@ -94,34 +126,6 @@ const displayController = (() => {
   }
 
   return { drawBoard: drawBoard, deleteCurrentBoard: deleteCurrentBoard };
-})();
-
-const Game = (() => {
-  const Player = (marker) => {
-    const _playerMarker = marker;
-
-    const getMarker = () => {
-      return _playerMarker;
-    };
-
-    return { getMarker };
-  };
-
-  const _playerOne = Player("X");
-  const _playerTwo = Player("O");
-
-  function _getPlayers() {
-    return [_playerOne.getMarker(), _playerTwo.getMarker()];
-  }
-
-  let totalTurns = 0;
-
-  function getCurrentPlayer() {
-    let _currentPlayer = _getPlayers()[totalTurns++ % 2];
-    return _currentPlayer;
-  }
-
-  return { getCurrentPlayer: getCurrentPlayer };
 })();
 
 displayController.drawBoard();
