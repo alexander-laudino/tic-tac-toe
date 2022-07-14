@@ -48,7 +48,7 @@ const displayController = (() => {
       let rowDiv = _createRowDiv(rowIndex);
       let columnIndex = 1;
       for (let column of row) {
-        let columnDiv = _createColumnDiv(columnIndex, rowIndex);
+        let columnDiv = _createColumnDiv(columnIndex, rowIndex, column);
         let markerText = _createMarkerPara(column);
         columnDiv.appendChild(markerText);
         rowDiv.appendChild(columnDiv);
@@ -72,14 +72,16 @@ const displayController = (() => {
     return rowDiv;
   }
 
-  function _createColumnDiv(columnIndex, rowIndex) {
+  function _createColumnDiv(columnIndex, rowIndex, column) {
     let columnDiv = document.createElement("div");
     columnDiv.setAttribute("class", `column${columnIndex}`);
     columnDiv.setAttribute("data-row", `${rowIndex}`);
     columnDiv.setAttribute("data-column", `${columnIndex}`);
-    columnDiv.addEventListener("click", (e) => {
-      console.log(e.target);
-    });
+    if (column === "") {
+      columnDiv.addEventListener("click", (e) => {
+        console.log(e.target);
+      });
+    }
     return columnDiv;
   }
 
