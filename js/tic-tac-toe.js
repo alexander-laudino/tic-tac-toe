@@ -90,118 +90,113 @@ const Game = (() => {
     return isFull;
   }
 
+  const displayController = (() => {
+    function drawBoard() {
+      let gameBoard = document.querySelector(".gameBoard");
+      let board = _createBoardDiv();
+      let rowIndex = 0;
+      for (let row of Game.getBoard()) {
+        let rowDiv = _createRowDiv(rowIndex);
+        let columnIndex = 0;
+        for (let column of row) {
+          let columnDiv = _createColumnDiv(columnIndex, rowIndex, column);
+          let markerText = _createMarkerPara(column);
+          columnDiv.appendChild(markerText);
+          rowDiv.appendChild(columnDiv);
+          columnIndex++;
+        }
+        board.appendChild(rowDiv);
+        rowIndex++;
+      }
+      gameBoard.appendChild(board);
+    }
+
+    function _createBoardDiv() {
+      let board = document.createElement("div");
+      board.setAttribute("class", "board");
+      return board;
+    }
+
+    function _createRowDiv(rowIndex) {
+      let rowDiv = document.createElement("div");
+      rowDiv.setAttribute("class", `row${rowIndex}`);
+      return rowDiv;
+    }
+
+    function _createColumnDiv(columnIndex, rowIndex, column) {
+      let columnDiv = document.createElement("div");
+      columnDiv.setAttribute("class", `column${columnIndex}`);
+      columnDiv.setAttribute("data-row", `${rowIndex}`);
+      columnDiv.setAttribute("data-column", `${columnIndex}`);
+      if (column === "") {
+        columnDiv.addEventListener("click", _addMarker), false;
+      }
+      return columnDiv;
+    }
+
+    function _addMarker(e) {
+      let marker = Game.getCurrentPlayer();
+      let row = e.target.getAttribute("data-row");
+      let column = e.target.getAttribute("data-column");
+      Game.selectSquare(marker, row, column);
+      displayController.deleteCurrentBoard();
+      displayController.drawBoard();
+      let gameWon = Game.checkForWinner(marker);
+      let isFull = Game.fullBoard();
+      if (gameWon === 1) {
+        _openWinnerPopup(marker);
+      }
+
+      if (gameWon === 0 && isFull) {
+        _openWinnerPopup("Tie");
+      }
+    }
+
+    function _createMarkerPara(column) {
+      let markerPara = document.createElement("p");
+      markerPara.textContent = column;
+      return markerPara;
+    }
+
+    function _openWinnerPopup(marker) {
+      let popup = _displayWinnerPopup();
+      let winnerPara = _createWinnerPara(marker);
+      popup.appendChild(winnerPara);
+      popup.addEventListener("click", _closeWinnerPopup), false;
+    }
+
+    function _displayWinnerPopup() {
+      let popup = document.getElementById("winnerPopup");
+      popup.style.display = "block";
+      return popup;
+    }
+
+    function _createWinnerPara(marker) {
+      let winnerPara = document.createElement("p");
+      winnerPara.setAttribute("class", "winnerPara");
+      if (marker === "Tie") {
+        winnerPara.textContent = "Tie game!";
+      } else {
+        winnerPara.textContent = `${marker} wins!`;
+      }
+      return winnerPara;
+    }
+
+    function _closeWinnerPopup() {
+      document.getElementById("winnerPopup").style.display = "none";
+    }
+
+    function deleteCurrentBoard() {
+      let board = document.querySelector(".board");
+      board.parentNode.removeChild(board);
+    }
+
+    return { drawBoard: drawBoard, deleteCurrentBoard: deleteCurrentBoard };
+  })();
+
   return {
-    getCurrentPlayer: getCurrentPlayer,
-    getBoard: GameBoard.getBoard,
-    resetGame: GameBoard.resetBoard,
-    selectSquare: GameBoard.selectSquare,
-    checkForWinner: GameBoard.checkForWinner,
-    fullBoard: fullBoard,
+    resetBoard: GameBoard.resetBoard,
+    drawBoard: displayController.drawBoard,
+    deleteCurrentBoard: displayController.deleteCurrentBoard,
   };
 })();
-
-const displayController = (() => {
-  function drawBoard() {
-    let gameBoard = document.querySelector(".gameBoard");
-    let board = _createBoardDiv();
-    let rowIndex = 0;
-    for (let row of Game.getBoard()) {
-      let rowDiv = _createRowDiv(rowIndex);
-      let columnIndex = 0;
-      for (let column of row) {
-        let columnDiv = _createColumnDiv(columnIndex, rowIndex, column);
-        let markerText = _createMarkerPara(column);
-        columnDiv.appendChild(markerText);
-        rowDiv.appendChild(columnDiv);
-        columnIndex++;
-      }
-      board.appendChild(rowDiv);
-      rowIndex++;
-    }
-    gameBoard.appendChild(board);
-  }
-
-  function _createBoardDiv() {
-    let board = document.createElement("div");
-    board.setAttribute("class", "board");
-    return board;
-  }
-
-  function _createRowDiv(rowIndex) {
-    let rowDiv = document.createElement("div");
-    rowDiv.setAttribute("class", `row${rowIndex}`);
-    return rowDiv;
-  }
-
-  function _createColumnDiv(columnIndex, rowIndex, column) {
-    let columnDiv = document.createElement("div");
-    columnDiv.setAttribute("class", `column${columnIndex}`);
-    columnDiv.setAttribute("data-row", `${rowIndex}`);
-    columnDiv.setAttribute("data-column", `${columnIndex}`);
-    if (column === "") {
-      columnDiv.addEventListener("click", _addMarker), false;
-    }
-    return columnDiv;
-  }
-
-  function _addMarker(e) {
-    let marker = Game.getCurrentPlayer();
-    let row = e.target.getAttribute("data-row");
-    let column = e.target.getAttribute("data-column");
-    Game.selectSquare(marker, row, column);
-    displayController.deleteCurrentBoard();
-    displayController.drawBoard();
-    let gameWon = Game.checkForWinner(marker);
-    let isFull = Game.fullBoard();
-    if (gameWon === 1) {
-      _openWinnerPopup(marker);
-    }
-
-    if (gameWon === 0 && isFull) {
-      _openWinnerPopup("Tie");
-    }
-  }
-
-  function _createMarkerPara(column) {
-    let markerPara = document.createElement("p");
-    markerPara.textContent = column;
-    return markerPara;
-  }
-
-  function _openWinnerPopup(marker) {
-    let popup = _displayWinnerPopup();
-    let winnerPara = _createWinnerPara(marker);
-    popup.appendChild(winnerPara);
-    popup.addEventListener("click", _closeWinnerPopup), false;
-  }
-
-  function _displayWinnerPopup() {
-    let popup = document.getElementById("winnerPopup");
-    popup.style.display = "block";
-    return popup;
-  }
-
-  function _createWinnerPara(marker) {
-    let winnerPara = document.createElement("p");
-    winnerPara.setAttribute("class", "winnerPara");
-    if (marker === "Tie") {
-      winnerPara.textContent = "Tie game!";
-    } else {
-      winnerPara.textContent = `${marker} wins!`;
-    }
-    return winnerPara;
-  }
-
-  function _closeWinnerPopup() {
-    document.getElementById("winnerPopup").style.display = "none";
-  }
-
-  function deleteCurrentBoard() {
-    let board = document.querySelector(".board");
-    board.parentNode.removeChild(board);
-  }
-
-  return { drawBoard: drawBoard, deleteCurrentBoard: deleteCurrentBoard };
-})();
-
-displayController.drawBoard();
