@@ -74,6 +74,7 @@ const Game = (() => {
   const _playerOne = Player("X");
   const _playerTwo = Player("O");
   let totalTurns = 0;
+  let hasWinner = false;
 
   function _getPlayers() {
     return [_playerOne.getMarker(), _playerTwo.getMarker()];
@@ -147,6 +148,7 @@ const Game = (() => {
       let gameWon = _GameBoard.checkForWinner(marker);
       let isFull = _fullBoard();
       if (gameWon === 1) {
+        hasWinner = true;
         _openWinnerPopup(marker);
       }
 
@@ -165,7 +167,7 @@ const Game = (() => {
       let popup = _displayWinnerPopup();
       let winnerPara = _createWinnerPara(marker);
       popup.appendChild(winnerPara);
-      popup.addEventListener("click", _closeWinnerPopup), false;
+      popup.addEventListener("click", closeWinnerPopup), false;
     }
 
     function _displayWinnerPopup() {
@@ -176,7 +178,7 @@ const Game = (() => {
 
     function _createWinnerPara(marker) {
       let winnerPara = document.createElement("p");
-      winnerPara.setAttribute("class", "winnerPara");
+      winnerPara.setAttribute("id", "winnerPara");
       if (marker === "Tie") {
         winnerPara.textContent = "Tie game!";
       } else {
@@ -185,8 +187,13 @@ const Game = (() => {
       return winnerPara;
     }
 
-    function _closeWinnerPopup() {
+    function closeWinnerPopup() {
       document.getElementById("winnerPopup").style.display = "none";
+    }
+
+    function clearWinnerPara() {
+      let winnerPara = document.getElementById("winnerPara");
+      winnerPara.parentNode.removeChild(winnerPara);
     }
 
     function deleteCurrentBoard() {
@@ -194,7 +201,12 @@ const Game = (() => {
       board.parentNode.removeChild(board);
     }
 
-    return { drawBoard: drawBoard, deleteCurrentBoard: deleteCurrentBoard };
+    return {
+      drawBoard: drawBoard,
+      deleteCurrentBoard: deleteCurrentBoard,
+      closeWinnerPopup: closeWinnerPopup,
+      clearWinnerPara: clearWinnerPara,
+    };
   })();
 
   function startGame() {
@@ -202,6 +214,11 @@ const Game = (() => {
       _displayController.deleteCurrentBoard();
       _GameBoard.resetBoard();
       _resetTotalTurns();
+    }
+
+    if (hasWinner) {
+      _displayController.closeWinnerPopup();
+      _displayController.clearWinnerPara();
     }
     _displayController.drawBoard();
   }
