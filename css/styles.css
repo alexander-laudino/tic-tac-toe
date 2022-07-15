@@ -64,6 +64,13 @@
   align-items: center;
 }
 
+.gameControls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: center;
+  align-items: center;
+}
+
 .newWinnerPopup {
   position: relative;
   text-align: center;
