@@ -94,6 +94,10 @@ const Game = (() => {
     totalTurns = 0;
   }
 
+  function _resetHasWinner() {
+    hasWinner = false;
+  }
+
   const _displayController = (() => {
     function drawBoard() {
       let gameBoard = document.querySelector(".gameBoard");
@@ -213,13 +217,14 @@ const Game = (() => {
     if (totalTurns > 0) {
       _displayController.deleteCurrentBoard();
       _GameBoard.resetBoard();
-      _resetTotalTurns();
     }
 
-    if (hasWinner) {
+    if (hasWinner || totalTurns === 9) {
       _displayController.closeWinnerPopup();
       _displayController.clearWinnerPara();
     }
+    _resetTotalTurns();
+    _resetHasWinner();
     _displayController.drawBoard();
   }
 
