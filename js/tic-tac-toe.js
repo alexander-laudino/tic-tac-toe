@@ -3,12 +3,19 @@ const Game = (() => {
     const _board = _createBoardArray();
 
     function _createBoardArray() {
-      const _board = [];
+      const board = [];
+      const row = ["", "", ""];
+      board[0] = Object.assign([], row);
+      board[1] = Object.assign([], row);
+      board[2] = Object.assign([], row);
+      return board;
+    }
+
+    function resetBoard() {
       const _row = ["", "", ""];
       _board[0] = Object.assign([], _row);
       _board[1] = Object.assign([], _row);
       _board[2] = Object.assign([], _row);
-      return _board;
     }
 
     function getBoard() {
@@ -47,6 +54,7 @@ const Game = (() => {
 
     return {
       getBoard: getBoard,
+      resetBoard: resetBoard,
       selectSquare: selectSquare,
       undoPreviousSelection: undoPreviousSelection,
       checkForWinner: checkForWinner,
@@ -85,6 +93,7 @@ const Game = (() => {
   return {
     getCurrentPlayer: getCurrentPlayer,
     getBoard: GameBoard.getBoard,
+    resetGame: GameBoard.resetBoard,
     selectSquare: GameBoard.selectSquare,
     checkForWinner: GameBoard.checkForWinner,
     fullBoard: fullBoard,
