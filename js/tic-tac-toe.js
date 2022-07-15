@@ -90,6 +90,10 @@ const Game = (() => {
     return isFull;
   }
 
+  function resetTotalTurns() {
+    totalTurns = 0;
+  }
+
   const displayController = (() => {
     function drawBoard() {
       let gameBoard = document.querySelector(".gameBoard");
