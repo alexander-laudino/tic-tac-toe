@@ -74,6 +74,7 @@ const Game = (() => {
   const _playerOne = Player("X");
   const _playerTwo = Player("O");
   let totalTurns = 0;
+  let boardDrawn = false;
   let hasWinner = false;
 
   function _getPlayers() {
@@ -88,6 +89,10 @@ const Game = (() => {
   function _fullBoard() {
     let isFull = totalTurns === 9 ? true : false;
     return isFull;
+  }
+
+  function _resetBoardDrawn() {
+    boardDrawn = false;
   }
 
   function _resetTotalTurns() {
@@ -117,6 +122,7 @@ const Game = (() => {
         rowIndex++;
       }
       gameBoard.appendChild(board);
+      boardDrawn = true;
     }
 
     function _createBoardDiv() {
@@ -214,7 +220,7 @@ const Game = (() => {
   })();
 
   function startGame() {
-    if (totalTurns > 0) {
+    if (totalTurns > 0 || boardDrawn) {
       _displayController.deleteCurrentBoard();
       _GameBoard.resetBoard();
     }
@@ -225,15 +231,16 @@ const Game = (() => {
     }
     _resetTotalTurns();
     _resetHasWinner();
+    _resetBoardDrawn();
     _displayController.drawBoard();
   }
 
   return {
-    startGame: startGame,
+    start: startGame,
   };
 })();
 
 const Page = (() => {
   const startGameButton = document.getElementById("startGame");
-  startGameButton.addEventListener("click", Game.startGame), false;
+  startGameButton.addEventListener("click", Game.start), false;
 })();
