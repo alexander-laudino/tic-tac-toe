@@ -1,5 +1,5 @@
 const Game = (() => {
-  const GameBoard = (() => {
+  const _GameBoard = (() => {
     const _board = _createBoardArray();
 
     function _createBoardArray() {
@@ -73,33 +73,32 @@ const Game = (() => {
 
   const _playerOne = Player("X");
   const _playerTwo = Player("O");
+  let totalTurns = 0;
 
   function _getPlayers() {
     return [_playerOne.getMarker(), _playerTwo.getMarker()];
   }
 
-  let totalTurns = 0;
-
-  function getCurrentPlayer() {
+  function _getCurrentPlayer() {
     let currentPlayer = _getPlayers()[totalTurns++ % 2];
     return currentPlayer;
   }
 
-  function fullBoard() {
+  function _fullBoard() {
     let isFull = totalTurns === 9 ? true : false;
     return isFull;
   }
 
-  function resetTotalTurns() {
+  function _resetTotalTurns() {
     totalTurns = 0;
   }
 
-  const displayController = (() => {
+  const _displayController = (() => {
     function drawBoard() {
       let gameBoard = document.querySelector(".gameBoard");
       let board = _createBoardDiv();
       let rowIndex = 0;
-      for (let row of Game.getBoard()) {
+      for (let row of _GameBoard.getBoard()) {
         let rowDiv = _createRowDiv(rowIndex);
         let columnIndex = 0;
         for (let column of row) {
@@ -139,14 +138,14 @@ const Game = (() => {
     }
 
     function _addMarker(e) {
-      let marker = Game.getCurrentPlayer();
+      let marker = _getCurrentPlayer();
       let row = e.target.getAttribute("data-row");
       let column = e.target.getAttribute("data-column");
-      Game.selectSquare(marker, row, column);
-      displayController.deleteCurrentBoard();
-      displayController.drawBoard();
-      let gameWon = Game.checkForWinner(marker);
-      let isFull = Game.fullBoard();
+      _GameBoard.selectSquare(marker, row, column);
+      deleteCurrentBoard();
+      drawBoard();
+      let gameWon = _GameBoard.checkForWinner(marker);
+      let isFull = _fullBoard();
       if (gameWon === 1) {
         _openWinnerPopup(marker);
       }
@@ -198,9 +197,21 @@ const Game = (() => {
     return { drawBoard: drawBoard, deleteCurrentBoard: deleteCurrentBoard };
   })();
 
+  function startGame() {
+    if (totalTurns > 0) {
+      _displayController.deleteCurrentBoard();
+      _GameBoard.resetBoard();
+      _resetTotalTurns();
+    }
+    _displayController.drawBoard();
+  }
+
   return {
-    resetBoard: GameBoard.resetBoard,
-    drawBoard: displayController.drawBoard,
-    deleteCurrentBoard: displayController.deleteCurrentBoard,
+    startGame: startGame,
   };
+})();
+
+const Page = (() => {
+  const startGameButton = document.getElementById("startGame");
+  startGameButton.addEventListener("click", Game.startGame), false;
 })();
